@@ -1,0 +1,42 @@
+{
+    "name": "phputil/flags-pdo",
+    "description": "A PDO-based storage for the phputil/flags framework",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "feature",
+        "flag",
+        "toggle",
+        "php",
+        "framework",
+        "library",
+        "pdo",
+        "storage"
+    ],
+    "autoload": {
+        "psr-4": {
+            "phputil\\flags\\": [
+                "src/",
+                "src/details"
+            ]
+        }
+    },
+    "require": {
+        "php": "^7.4.0"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.10",
+        "kahlan/kahlan": "^5.2",
+        "captainhook/captainhook": "^5.18",
+        "friendsofphp/php-cs-fixer": "^3.35",
+        "phputil/restage": "^0.3.0",
+        "phputil/flags": "^0.4.0"
+    },
+    "scripts": {
+        "hooks:install": "captainhook install --only-enabled -n",
+        "test": "kahlan --reporter=tree",
+        "check": "phpstan analyze src --level=5",
+        "style:check": "php-cs-fixer check --verbose",
+        "style:fix": "php-cs-fixer fix --verbose && restage"
+    }
+}
