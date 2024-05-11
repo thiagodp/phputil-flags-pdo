@@ -31,4 +31,4 @@ jobs:
             ${{ runner.os }}-php-
 
       - run: composer install
-      - run: composer test
+      - run: composer run test:ci

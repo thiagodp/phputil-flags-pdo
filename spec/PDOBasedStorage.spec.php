@@ -10,7 +10,9 @@ describe( 'PDOBasedStorage', function() {
     $this->storage = null;
 
     beforeAll( function() {
+        // MySQL
         // $this->pdo = new PDO( 'mysql:dbname=test;host=localhost;charset=utf8', 'root', '',
+        // SQLite
         $this->pdo = new PDO( 'sqlite:test.sqlite', null, null,
             [ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ] );
 
