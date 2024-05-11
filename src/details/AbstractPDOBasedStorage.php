@@ -1,9 +1,9 @@
 <?php
 namespace phputil\flags;
 
-use \DateTime;
-use \PDO;
-use \PDOException;
+use DateTime;
+use PDO;
+use PDOException;
 use PDOStatement;
 
 const DEFAULT_DATE_FORMAT = 'Y-m-d H:i:s';
@@ -20,7 +20,7 @@ abstract class AbstractPDOBasedStorage implements FlagStorage {
         $this->dateFormat = DEFAULT_DATE_FORMAT;
     }
 
-    public abstract function setupCommand(): string;
+    abstract public function setupCommand(): string;
 
     public function setup() {
         try {
@@ -39,25 +39,17 @@ abstract class AbstractPDOBasedStorage implements FlagStorage {
     // FlagStorage
     //
 
-    public function isEnabled(string $key): bool {
+    public function isEnabled( string $key ): bool {
         $sql = "SELECT enabled FROM {$this->flagTableName} WHERE key = ?";
-        try {
-            $row = $this->firstRow( $sql, [ $key ] );
-            return $row === null ? false : $row[ 'enabled' ];
-        } catch ( PDOException $e ) {
-            throw new FlagException( 'Error getting the flag', $e->getCode(), $e );
-        }
+        $row = $this->firstRow( $sql, [ $key ] );
+        return $row === null ? false : $row[ 'enabled' ];
     }
 
     /** @inheritDoc */
     public function get( string $key ): ?FlagData {
         $sql = "SELECT * FROM {$this->flagTableName} WHERE key = ?";
-        try {
-            $row = $this->firstRow( $sql, [ $key ] );
-            return $row === null ? null : $this->rowToObject( $row );
-        } catch ( PDOException $e ) {
-            throw new FlagException( 'Error getting the flag', $e->getCode(), $e );
-        }
+        $row = $this->firstRow( $sql, [ $key ] );
+        return $row === null ? null : $this->rowToObject( $row );
     }
 
     /** @inheritDoc */
@@ -98,11 +90,13 @@ abstract class AbstractPDOBasedStorage implements FlagStorage {
         SQL;
 
         $params = [
-            'enabled'       => $data->enabled,
-            'description'   => $data->metadata->description,
-            'updatedAt'     => $data->metadata->updatedAt,
-            'accessCount'   => $data->metadata->accessCount,
-            'tags'          => implode( ',', $data->metadata->tags )
+            'enabled' => $data->enabled,
+            'description' => $data->metadata->description,
+            'updatedAt' => $data->metadata->updatedAt->format( $this->dateFormat ),
+            'accessCount' => $data->metadata->accessCount,
+            'tags' => implode( ',', $data->metadata->tags ),
+            // where
+            'key' => $key
         ];
 
         try {
@@ -116,7 +110,7 @@ abstract class AbstractPDOBasedStorage implements FlagStorage {
     /** @inheritDoc */
     public function remove( string $key ): bool {
         try {
-            $ps = $this->run( "DELETE FROM {$this->flagTableName} WHERE key = ?", [] );
+            $ps = $this->run( "DELETE FROM {$this->flagTableName} WHERE key = ?", [ $key ] );
             return $ps->rowCount() > 0;
         } catch ( PDOException $e ) {
             throw new FlagException( 'Error while removing the flag', $e->getCode(), $e );
@@ -143,7 +137,7 @@ abstract class AbstractPDOBasedStorage implements FlagStorage {
             }
             $flags = [];
             foreach ( $ps as $row ) {
-                $flags []= $this->rowToObject( $row );
+                $flags [] = $this->rowToObject( $row );
             }
             return $flags;
         } catch ( PDOException $e ) {
@@ -155,7 +149,7 @@ abstract class AbstractPDOBasedStorage implements FlagStorage {
     public function count( array $options = [] ): int {
         $sql = "SELECT COUNT(id) AS count FROM {$this->flagTableName}";
         $row = $this->firstRow( $sql );
-        return $row === null ? 0 : $row[ 'count' ];
+        return $row === null ? 0 : (int) $row[ 'count' ];
     }
 
     //
@@ -165,10 +159,9 @@ abstract class AbstractPDOBasedStorage implements FlagStorage {
     protected function firstRow( string $sql, array $params = [] ): ?array {
         try {
             $ps = $this->run( $sql, $params );
-            if ( $ps->rowCount() < 1 ) {
-                return null;
-            }
-            return $ps->fetch();
+            $content = $ps->fetch();
+            $ps->closeCursor();
+            return $content === false ? null : $content;
         } catch ( PDOException $e ) {
             throw new FlagException( 'Error while getting the flag', $e->getCode(), $e );
         }
@@ -195,7 +188,6 @@ abstract class AbstractPDOBasedStorage implements FlagStorage {
         return new FlagData( $r[ 'key' ], $r[ 'enabled' ] == 1, $metadata );
     }
 
-
     protected function add( FlagData &$data ): void {
 
         $sql = <<<SQL
@@ -206,13 +198,13 @@ abstract class AbstractPDOBasedStorage implements FlagStorage {
         SQL;
 
         $params = [
-            'key'           => $data->key,
-            'enabled'       => $data->enabled,
-            'description'   => $data->metadata->description,
-            'createdAt'     => $data->metadata->createdAt->format( $this->dateFormat ),
-            'updatedAt'     => $data->metadata->updatedAt->format( $this->dateFormat ),
-            'accessCount'   => $data->metadata->accessCount,
-            'tags'          => implode( ',', $data->metadata->tags )
+            'key' => $data->key,
+            'enabled' => $data->enabled,
+            'description' => $data->metadata->description,
+            'createdAt' => $data->metadata->createdAt->format( $this->dateFormat ),
+            'updatedAt' => $data->metadata->updatedAt->format( $this->dateFormat ),
+            'accessCount' => $data->metadata->accessCount,
+            'tags' => implode( ',', $data->metadata->tags )
         ];
 
         try {
@@ -234,8 +226,8 @@ abstract class AbstractPDOBasedStorage implements FlagStorage {
         SQL;
 
         $params = [
-            'updatedAt'     => $data->metadata->updatedAt,
-            'accessCount'   => $data->metadata->accessCount,
+            'updatedAt' => $data->metadata->updatedAt,
+            'accessCount' => $data->metadata->accessCount,
         ];
 
         try {

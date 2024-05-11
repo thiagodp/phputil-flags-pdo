@@ -3,7 +3,7 @@ namespace phputil\flags;
 
 require_once 'vendor/autoload.php';
 
-use \PDO;
+use PDO;
 
 const DEFAULT_TABLE_NAME = 'puf_flag'; // puf = phputilflag
 
@@ -19,8 +19,10 @@ class PDOBasedStorage implements FlagStorage {
         $driverName = $pdo->getAttribute( PDO::ATTR_DRIVER_NAME );
 
         switch ( $driverName ) { // TODO: change to match() when using PHP 8
-            case 'mysql': $this->storage = new MySQLStorage( $pdo, $tableName ); break;
-            case 'sqlite': $this->storage = new SQLiteStorage( $pdo, $tableName ); break;
+            case 'mysql': $this->storage = new MySQLStorage( $pdo, $tableName );
+                break;
+            case 'sqlite': $this->storage = new SQLiteStorage( $pdo, $tableName );
+                break;
             default: throw new FlagException( 'Unsupported database storage: ' . $driverName );
         }
 
@@ -32,7 +34,7 @@ class PDOBasedStorage implements FlagStorage {
     //
 
     /** @inheritDoc */
-    public function isEnabled(string $key): bool {
+    public function isEnabled( string $key ): bool {
         return $this->storage->isEnabled( $key );
     }
 

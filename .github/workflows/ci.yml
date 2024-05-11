@@ -1,0 +1,34 @@
+name: CI
+on: push
+
+env:
+  XDEBUG_MODE: coverage
+
+jobs:
+
+  ci_job:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        php-version: ['7.4', '8.3']
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          php-version: ${{ matrix.php-version }}
+          extensions: none
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - run: composer install
+      - run: composer test

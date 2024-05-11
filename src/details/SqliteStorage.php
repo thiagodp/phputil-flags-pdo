@@ -3,7 +3,7 @@ namespace phputil\flags;
 
 class SQLiteStorage extends AbstractPDOBasedStorage {
 
-    public function __construct(\PDO $pdo, string $flagTableName ) {
+    public function __construct( \PDO $pdo, string $flagTableName ) {
         parent::__construct( $pdo, $flagTableName );
         $this->dateFormat = 'c'; // ISO 8601 date
     }
@@ -25,4 +25,3 @@ class SQLiteStorage extends AbstractPDOBasedStorage {
     }
 
 }
-

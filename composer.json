@@ -35,6 +35,7 @@
     "scripts": {
         "hooks:install": "captainhook install --only-enabled -n",
         "test": "kahlan --reporter=tree",
+        "cov": "kahlan --coverage=4",
         "check": "phpstan analyze src --level=5",
         "style:check": "php-cs-fixer check --verbose",
         "style:fix": "php-cs-fixer fix --verbose && restage"

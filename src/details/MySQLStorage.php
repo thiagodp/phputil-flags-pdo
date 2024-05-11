@@ -15,11 +15,10 @@ class MySQLStorage extends AbstractPDOBasedStorage {
                 `updatedAt`   DATETIME      DEFAULT NOW(),
                 `accessCount` INT           DEFAULT 0,
                 `tags`        VARCHAR(200)  DEFAULT '',
-                CONSTRAINT pk_{$tableName}        PRIMARY KEY,
+                CONSTRAINT pk_{$tableName}        PRIMARY KEY( `id` ),
                 CONSTRAINT unq_{$tableName}_name  UNIQUE( `key` )
             ) ENGINE=INNODB;
         SQL;
     }
 
 }
-
