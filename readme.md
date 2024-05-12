@@ -13,9 +13,22 @@ Currently supported drivers:
 
 ## Installation
 
+> Requires PHP 7.4+ and extension `pdo`
+
 ```bash
 composer require phputil/flags-pdo
 ```
+
+⚠ Note: You may need to enable the PDO extension you want to use.
+
+For instance, if you want to use `sqlite`:
+1. Find your `php.ini` file:
+
+`php --ini`
+
+2. Open your `php.ini` and uncomment (or add) the following line:
+
+`extension=pdo_sqlite`
 
 ## Usage
 
