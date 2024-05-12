@@ -17,6 +17,21 @@ Currently supported drivers:
 composer require phputil/flags-pdo
 ```
 
+## Usage
+
+```php
+require_once 'vendor/autoload.php';
+
+use phputil\flags\pdo\PDOBasedStorage;
+
+$pdo = /* create you PDO instance here, e.g.: new PDO( 'sqlite:example.sqlite' ) */;
+$storage = new PDOBasedStorage( $pdo );
+
+// Now use it with phputil\flags
+$flags = new phputil\flags\FlagManager( $storage );
+...
+```
+
 ## License
 
 [MIT](/LICENSE) © [Thiago Delgado Pinto](https://github.com/thiagodp)

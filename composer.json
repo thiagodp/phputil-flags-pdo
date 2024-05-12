@@ -17,7 +17,7 @@
         "psr-4": {
             "phputil\\flags\\pdo\\": [
                 "src/",
-                "src/details"
+                "src/details/"
             ]
         }
     },
