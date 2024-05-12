@@ -1,8 +1,6 @@
 <?php
 namespace phputil\flags\pdo;
 
-require_once 'vendor/autoload.php';
-
 use PDO;
 use phputil\flags\FlagStorage;
 use phputil\flags\FlagException;
