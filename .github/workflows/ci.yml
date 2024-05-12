@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
           php-version: ${{ matrix.php-version }}
-          extensions: none
+          extensions: pdo, pdo_sqlite
 
       - name: Cache Composer packages
         id: composer-cache

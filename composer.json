@@ -22,9 +22,11 @@
         }
     },
     "require": {
-        "php": "^7.4 || ^8.0"
+        "php": "^7.4 || ^8.0",
+        "ext-pdo": "*"
     },
     "require-dev": {
+        "ext-pdo_sqlite": "*",
         "phpstan/phpstan": "^1.10",
         "kahlan/kahlan": "^5.2",
         "captainhook/captainhook": "^5.18",
