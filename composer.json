@@ -15,7 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "phputil\\flags\\": [
+            "phputil\\flags\\pdo\\": [
                 "src/",
                 "src/details"
             ]

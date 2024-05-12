@@ -1,5 +1,5 @@
 <?php
-namespace phputil\flags;
+namespace phputil\flags\pdo;
 
 class SQLiteStorage extends AbstractPDOBasedStorage {
 

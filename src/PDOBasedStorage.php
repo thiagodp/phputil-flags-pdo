@@ -1,9 +1,12 @@
 <?php
-namespace phputil\flags;
+namespace phputil\flags\pdo;
 
 require_once 'vendor/autoload.php';
 
 use PDO;
+use phputil\flags\FlagStorage;
+use phputil\flags\FlagException;
+use phputil\flags\FlagData;
 
 const DEFAULT_TABLE_NAME = 'puf_flag'; // puf = phputilflag
 

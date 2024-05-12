@@ -1,10 +1,14 @@
 <?php
-namespace phputil\flags;
+namespace phputil\flags\pdo;
 
 use DateTime;
 use PDO;
 use PDOException;
 use PDOStatement;
+use phputil\flags\FlagStorage;
+use phputil\flags\FlagException;
+use phputil\flags\FlagData;
+use phputil\flags\FlagMetadata;
 
 const DEFAULT_DATE_FORMAT = 'Y-m-d H:i:s';
 

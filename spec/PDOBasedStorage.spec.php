@@ -1,8 +1,9 @@
 <?php
+require_once 'vendor/autoload.php';
 
 use phputil\flags\FlagData;
 use phputil\flags\FlagMetadata;
-use phputil\flags\PDOBasedStorage;
+use phputil\flags\pdo\PDOBasedStorage;
 
 describe( 'PDOBasedStorage', function() {
 
